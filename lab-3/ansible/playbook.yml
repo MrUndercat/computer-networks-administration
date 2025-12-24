@@ -1,0 +1,31 @@
+---
+- name: Lab 2 – Ansible + Caddy
+  hosts: my_servers
+  connection: local
+  gather_facts: false
+  become: false
+
+  vars:
+    test_file_path: "{{ lookup('env', 'HOME') }}/test.txt"
+
+  tasks:
+    - name: Create test file with initial content
+      shell: echo "test_file_content" > {{ test_file_path }}
+
+    - name: Check that file exists
+      stat:
+        path: "{{ test_file_path }}"
+      register: file_stat
+
+    - name: Fail if file does not exist
+      fail:
+        msg: "File was not created"
+      when: not file_stat.stat.exists
+
+    - name: Change file content before deletion
+      shell: echo "modified_content" > {{ test_file_path }}
+
+    - name: Remove test file
+      file:
+        path: "{{ test_file_path }}"
+        state: absent

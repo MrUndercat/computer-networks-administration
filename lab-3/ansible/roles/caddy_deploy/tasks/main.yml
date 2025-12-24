@@ -45,6 +45,11 @@
     name: caddy
     state: reloaded
 
+- name: Reload with new config
+  service:
+    name: caddy
+    state: reloaded
+
 - name: Create web root directory
   file:
     path: /var/www/html
@@ -69,5 +74,6 @@
     group: root
     mode: "0644"
   notify: Reload Caddy
+
 
 
